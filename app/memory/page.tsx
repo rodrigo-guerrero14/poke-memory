@@ -18,6 +18,10 @@ const getIdPokemonsRandom = () => {
     return Math.floor(Math.random() * (151 - 1)) + 1;
 }
 
+const sortPokemons = (pokemons:PokemonsInfo[]) => {
+    return pokemons.sort(() => ( 0.5 - Math.random()));
+}
+
 const getPokemons = async () => {
     try {
         const firstPokemon = getIdPokemonsRandom();
@@ -35,7 +39,9 @@ const getPokemons = async () => {
             id: pokemonInfo.id,
             name: pokemonInfo.name
         }))
-        return pokemonImages;
+        const pokemonsArray = sortPokemons([...pokemonImages, ...pokemonImages]);
+
+        return pokemonsArray;
         
     } catch (error) {
         notFound();
@@ -46,7 +52,7 @@ export default async function MemoryPage() {
     const listadoPokemons: PokemonsInfo[]  = await getPokemons();
     return (
         <>
-            <MemoryContenedor listadoPokemons={[...listadoPokemons, ...listadoPokemons]} />
+            <MemoryContenedor listadoPokemons={listadoPokemons} />
         </>
     )
 }
