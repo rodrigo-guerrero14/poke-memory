@@ -1,0 +1,1 @@
+export { MemoryItem } from './MemoryItem/page'
