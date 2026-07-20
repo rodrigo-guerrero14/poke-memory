@@ -2,6 +2,8 @@
 import { PokemonsInfo } from "@/pokemons/interfaces/pokemon-image";
 import { useState } from "react";
 import { MemoryItem } from "../MemoryItem/page";
+import { PokemonModal } from "../PokemonModal/page";
+import { MemoryHeader } from "../MemoryHeader/page";
 
 interface Props {
     listadoPokemons: PokemonsInfo[];
@@ -36,18 +38,26 @@ export const MemoryContenedor = ({listadoPokemons} : Props) => {
             }
         }
     }
+
+    const deletePokemonsFinded = () => {
+        setPokemonsFinded([])
+    }
     
     return (
-        <div className="w-screen min-h-dvh items-center justify-around bg-indigo-700 grid grid-cols-3 gap-2">
-            {listadoPokemons.map((pokemon, indice) => (
-                <MemoryItem 
-                    key={`${pokemon.id}-${indice}`}
-                    pokemonInfo={pokemon}
-                    compararPokemons={compararPokemons}
-                    hidePokemons={hidePokemons}
-                    pokemonsFinded={pokemonsFinded}
-                />
-            ))}
+        <div className="relative z-10 flex min-h-dvh w-full flex-col items-center">
+            <MemoryHeader totalPairs={listadoPokemons.length / 2} pairsFound={pokemonsFinded.length} />
+            <div className="grid w-full max-w-3xl grid-cols-3 place-items-center gap-4 p-6 sm:gap-6">
+                {listadoPokemons.map((pokemon, indice) => (
+                    <MemoryItem
+                        key={`${pokemon.id}-${indice}`}
+                        pokemonInfo={pokemon}
+                        compararPokemons={compararPokemons}
+                        hidePokemons={hidePokemons}
+                        pokemonsFinded={pokemonsFinded}
+                    />
+                ))}
+            </div>
+            <PokemonModal pokemonsFinded={pokemonsFinded} deletePokemonsFinded={deletePokemonsFinded} />
         </div>
     )
 } 

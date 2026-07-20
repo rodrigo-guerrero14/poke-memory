@@ -1,26 +1,46 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Pokédex palette: paper canvas, ink text, and three brand accents */
+  --background: #fff7e8;
+  --foreground: #16223f;
+  --poke-pattern-dot: rgb(60 90 166 / 14%);
+
+  --color-paper: #fff7e8;
+  --color-ink: #16223f;
+  --color-pokedex-blue: #3c5aa6;
+  --color-pika-yellow: #ffcb05;
+  --color-vermilion: #f93318;
+  --color-poke-red: #ff0000;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-paper: var(--color-paper);
+  --color-ink: var(--color-ink);
+  --color-pokedex-blue: var(--color-pokedex-blue);
+  --color-pika-yellow: var(--color-pika-yellow);
+  --color-vermilion: var(--color-vermilion);
+  --color-poke-red: var(--color-poke-red);
+  --font-display: var(--font-baloo);
+  --font-body: var(--font-nunito);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+
+.bg-poke-pattern {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(circle at 30% 30%, var(--poke-pattern-dot) 3px, transparent 4px),
+    radial-gradient(circle at 70% 30%, var(--poke-pattern-dot) 3px, transparent 4px),
+    radial-gradient(circle at 30% 70%, var(--poke-pattern-dot) 3px, transparent 4px),
+    radial-gradient(circle at 70% 70%, var(--poke-pattern-dot) 3px, transparent 4px),
+    radial-gradient(circle at 50% 50%, var(--poke-pattern-dot) 4px, transparent 5px);
+  background-size: 64px 64px;
+  background-repeat: repeat;
 }

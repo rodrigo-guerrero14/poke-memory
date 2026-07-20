@@ -1,4 +1,5 @@
 import { MemoryContenedor } from "@/components/MemoryContenedor/page";
+import { PokemonCorner } from "@/components/PokemonCorner/page";
 import { PokemonsInfo } from "@/pokemons/interfaces/pokemon-image";
 import { PokemonResponse } from "@/pokemons/interfaces/pokemon-response";
 import { notFound } from "next/navigation";
@@ -53,6 +54,7 @@ export default async function MemoryPage() {
     return (
         <>
             <MemoryContenedor listadoPokemons={listadoPokemons} />
+            <PokemonCorner />
         </>
     )
-}
+}   
