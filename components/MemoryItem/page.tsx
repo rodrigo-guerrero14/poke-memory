@@ -7,9 +7,9 @@ import { PokemonsInfo } from "@/pokemons/interfaces/pokemon-image";
 
 interface Props {
     pokemonInfo: PokemonsInfo;
-    compararPokemons: (pokemonInfo: PokemonsInfo) => void;
-    hidePokemons: boolean;
-    pokemonsFinded: PokemonsInfo[];
+    isActive: boolean;
+    isFinded: boolean;
+    onSelect: () => void;
 }
 
 const usePrefersReducedMotion = () => {
@@ -26,47 +26,16 @@ const usePrefersReducedMotion = () => {
     return prefersReducedMotion;
 }
 
-export const MemoryItem = ({ pokemonInfo, compararPokemons, hidePokemons, pokemonsFinded }: Props) => {
+export const MemoryItem = ({ pokemonInfo, isActive, isFinded, onSelect }: Props) => {
 
-    const [isActive, setIsActive] = useState(false);
-    const [isFinded, setIsFinded] = useState(false);
     const prefersReducedMotion = usePrefersReducedMotion();
-
-    const handleOnClick = () => {
-        setIsActive((prevStatus) => !prevStatus);
-        if (!isFinded) {
-            setTimeout(() => {
-                compararPokemons(pokemonInfo);
-            }, 500)
-        }
-    }
-
-    const findPokemon = () => {
-        const isPokemonFinded = pokemonsFinded.find((pokemon) => { return pokemon.id === pokemonInfo.id });
-        if (isPokemonFinded !== undefined && isPokemonFinded) {
-            setIsFinded(true);
-        } else {
-            setIsFinded(false);
-        }
-    }
-
-    useEffect(() => {
-        if (hidePokemons && !isFinded) {
-            setIsActive(false);
-        }
-    }, [hidePokemons, isFinded])
-
-    useEffect(() => {
-        findPokemon();
-    }, [pokemonsFinded])
-
     const isRevealed = isActive || isFinded;
 
     return (
         <button
             type="button"
-            disabled={isFinded}
-            onClick={handleOnClick}
+            disabled={isFinded || isActive}
+            onClick={onSelect}
             aria-label={isRevealed ? `${pokemonInfo.name}${isFinded ? ", pareja encontrada" : ""}` : "Carta oculta, pulsa para voltear"}
             className={`relative flex aspect-square w-24 items-center justify-center rounded-2xl transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-pika-yellow focus-visible:ring-offset-2 focus-visible:ring-offset-paper sm:w-32 md:w-40 ${isRevealed ? '' : 'cursor-pointer'} ${isFinded ? 'scale-95 opacity-60' : ''}`}
             style={{ perspective: 1000 }}
@@ -75,7 +44,7 @@ export const MemoryItem = ({ pokemonInfo, compararPokemons, hidePokemons, pokemo
                 className="relative h-full w-full"
                 initial={false}
                 animate={{
-                    rotateY: !isActive ? 180 : 0,
+                    rotateY: !isRevealed ? 180 : 0,
                 }}
                 transition={{
                     duration: prefersReducedMotion ? 0 : 0.6,
