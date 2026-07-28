@@ -23,7 +23,3 @@ bun dev
 ## TO DO
 
 - Es necesario establecer posiciones aleatorias a las imagenes y que estas varien con respecto a los intentos del jugador.
-
-- Mejorar interfaz del usuario.
-
-- Eliminar Spanglish.
