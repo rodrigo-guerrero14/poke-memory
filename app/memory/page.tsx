@@ -3,6 +3,7 @@ import { PokemonCorner } from "@/components/PokemonCorner/page";
 import { PokemonsInfo } from "@/pokemons/interfaces/pokemon-image";
 import { PokemonResponse } from "@/pokemons/interfaces/pokemon-response";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 
 const getPokemon = async (id: string): Promise<any> => {
     try{
@@ -15,19 +16,31 @@ const getPokemon = async (id: string): Promise<any> => {
     }
 }
 
-const getIdPokemonsRandom = () => {
-    return Math.floor(Math.random() * (151 - 1)) + 1;
+const MIN_POKEMON_ID = 1;
+const MAX_POKEMON_ID = 151;
+const PAIRS_COUNT = 3;
+
+const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
 }
 
-const sortPokemons = (pokemons:PokemonsInfo[]) => {
-    return pokemons.sort(() => ( 0.5 - Math.random()));
+const sortPokemons = (): number[] => {
+    const idsRange = Array.from(
+        { length: MAX_POKEMON_ID - MIN_POKEMON_ID + 1 },
+        (_, index) => index + MIN_POKEMON_ID
+    );
+    return shuffleArray(idsRange).slice(0, PAIRS_COUNT);
 }
 
 const getPokemons = async () => {
     try {
-        const firstPokemon = getIdPokemonsRandom();
-        const secondPokemon = getIdPokemonsRandom();
-        const thirdPokemon = getIdPokemonsRandom();
+        await connection();
+        const [firstPokemon, secondPokemon, thirdPokemon] = sortPokemons();
 
         const pokemons: PokemonResponse[] = await Promise.all([
             getPokemon(firstPokemon.toString()),
@@ -40,10 +53,9 @@ const getPokemons = async () => {
             id: pokemonInfo.id,
             name: pokemonInfo.name
         }))
-        const pokemonsArray = sortPokemons([...pokemonImages, ...pokemonImages]);
 
-        return pokemonsArray;
-        
+        return shuffleArray([...pokemonImages, ...pokemonImages]);
+
     } catch (error) {
         notFound();
     }
